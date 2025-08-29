@@ -17,9 +17,18 @@
           buildInputs = with pkgs; [
             python
             uv
+            zsh
+            zsh-completions
+            readline
+            ncurses
+            which
+            findutils
+            tree
           ];
 
           shellHook = ''
+            echo "setting up shell..."
+            export SHELL=${pkgs.zsh}/bin/zsh
             echo "Using Python $(python --version) with uv $(uv --version)"
             
             if [ -f "uv.lock" ]; then
