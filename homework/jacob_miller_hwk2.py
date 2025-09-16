@@ -59,8 +59,13 @@ get_input_score()
 
 input("\n Hit enter to proceed to the next problem...")
 
-## Note: If I was required to assume users input spaces between their inputs then
-##          I would take the whole string input and remove 
+
+
+
+
+#################################################################################
+
+
 
 """
 Question 2 (5 points): Write the function findChars as described in the docstring
@@ -95,6 +100,8 @@ def findChars():
 
     letter_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
+    # could use string.ascii_lowercase to define letter list
+
     lower_input = input("Please input a lowercase string: \n")
 
     letter_count = [0 for i in range(len(letter_list))]
@@ -104,6 +111,7 @@ def findChars():
             if lower_input[index] == letter_list[letter_index]:
                 letter_count[letter_index] += 1
     print(letter_count)
+    return letter_count
 
     
 
@@ -112,7 +120,8 @@ findChars()
 
 
 def findChars_better():
-    letters = 'abcdefghijklmnopqrstuvwxyz'
+    import string
+    letters = string.ascii_lowercase
 
     lower_input = input("Please input a lowercase string: \n")
 
@@ -125,6 +134,14 @@ def findChars_better():
 
 
 input("\n Hit enter to proceed to the next problem...")
+
+
+
+
+#################################################################################
+
+
+
 
 """
 Question 3 (5 points): Write the function checkString as described in the docstring
@@ -193,6 +210,11 @@ def checkString():
 checkString()
 
 input("\n Hit enter to proceed to the next problem...")
+
+
+
+
+#################################################################################
 
 
 
