@@ -36,18 +36,31 @@ print Count
 
 
 def get_input_score():
-    s = input(
-        "Please enter the score as a single number whose only digits are 1, 2, 3, 4, or 5 \n (the score 5, 1, 2 should be entered as 512) \n"
-    )
-    score = [i for i in s]
-    print(f"Score = {score}")
 
-    score_count = [s.count(str(i)) for i in range(1, 6)]
-    print(f"Score counts = {score_count}")
+    print("Problem 1: \n")
+
+    allowed_scores = ['1', '2', '3', '4', '5']
+
+    raw_input = input(
+        "Please enter the score list whose only digits are 1, 2, 3, 4, or 5 \n (the score 5, 1, 2 should be entered as 512) \n"
+    )
+    
+    #filter for just allowed scores (makes '123' or '1 2 3' or '1, 2, 3' all work the same)
+    filtered_input = "".join([c for c in raw_input if c in allowed_scores])
+
+    Score = [i for i in filtered_input]
+    print(f"Score = {Score}")
+
+    Count = [filtered_input.count(str(i)) for i in range(1, 6)]
+    print(f"Score counts = {Count}")
 
 
 get_input_score()
 
+input("\n Hit enter to proceed to the next problem...")
+
+## Note: If I was required to assume users input spaces between their inputs then
+##          I would take the whole string input and remove 
 
 """
 Question 2 (5 points): Write the function findChars as described in the docstring
@@ -78,6 +91,40 @@ def findChars():
 
     """
 
+    print("\n \n Problem 2: \n")
+
+    letter_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+    lower_input = input("Please input a lowercase string: \n")
+
+    letter_count = [0 for i in range(len(letter_list))]
+
+    for index in range(len(lower_input)):
+        for letter_index in range(len(letter_list)):
+            if lower_input[index] == letter_list[letter_index]:
+                letter_count[letter_index] += 1
+    print(letter_count)
+
+    
+
+findChars()
+
+
+
+def findChars_better():
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+
+    lower_input = input("Please input a lowercase string: \n")
+
+    output = []
+
+    for c in range(len(letters)):
+        output.append(lower_input.count(letters[c]))
+    print(output)
+
+
+
+input("\n Hit enter to proceed to the next problem...")
 
 """
 Question 3 (5 points): Write the function checkString as described in the docstring
@@ -105,6 +152,48 @@ def checkString():
 
 
     """
+    print("\n Problem 3: \n \n")
+    
+    vowels = "aeiou"
+    
+    # opens the strings file in the same location in read mode.
+    strings_file = open('strings.txt', 'r')
+
+    # a list of strings where each entry is a line from the file
+    raw_strings = strings_file.readlines() 
+
+    # remove line breaks and whitespace
+    strings = [s.strip() for s in raw_strings]  
+
+    for string in strings: 
+
+        # tracks if the string is vowel-alphabetical ordered
+        vowel_alphabetical = True
+
+        latest_vowel_index = -1 # initialize at -1
+
+        for vowel in vowels:
+            # get index of vowel, returns -1 if not found
+            next_vowel_index = string.find(vowel) #left most index of next vowel
+
+            if next_vowel_index != -1: # if next vowel exists in the string 
+                #check order using and so it stays false if false at any step
+                vowel_alphabetical = vowel_alphabetical and (next_vowel_index > latest_vowel_index)
+                # update latest non -1 vowel position
+                latest_vowel_index = string.rfind(vowel) # update latest to rightmost instance of next
+
+        # print results
+        if vowel_alphabetical:
+            print(f"{string}, Yes")
+        else:
+            print(f"{string}, No")
+
+    strings_file.close()
+
+checkString()
+
+input("\n Hit enter to proceed to the next problem...")
+
 
 
 """
@@ -112,7 +201,7 @@ Question 4 (5 points). Write the function reverse_vowels as described in the doc
 """
 
 
-def reverse_vowels(st):
+def reverse_vowels(st: str):
     """
     This function takes a string as argument and returns a new string identical to the input
     string except that the vowels appear in reverse order.
@@ -125,3 +214,37 @@ def reverse_vowels(st):
     input is 'people' the function returns 'people'
 
     """
+    # make sure string is in lower case
+
+    st = st.lower()
+    vowels = 'aeiou'
+    
+    # create vowel list from st
+    vowel_list = []
+    for s in st:
+        if s in vowels:
+            vowel_list.append(s)
+
+    # construct reversed vowel string
+    st_reversed = ""
+    for i in range(len(st)):
+        if st[i] in vowels:
+            st_reversed += vowel_list.pop()
+        else:
+            st_reversed += st[i]
+
+    return st_reversed
+
+
+# Output results to terminal
+
+print("\n Problem 4: \n \n")
+
+words = ["least", "leeast", "run", "people"]
+
+for word in words:
+    print(f"{word} --> {reverse_vowels(word)}")
+
+input_prob_4 = input("Please input a lowercase string to test: \n")
+
+print(f"{input_prob_4} --> {reverse_vowels(input_prob_4)}")
