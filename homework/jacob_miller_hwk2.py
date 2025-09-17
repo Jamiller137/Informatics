@@ -39,14 +39,15 @@ def get_input_score():
 
     print("Problem 1: \n")
 
-    allowed_scores = ['1', '2', '3', '4', '5']
+    allowed_scores = ["1", "2", "3", "4", "5"]
 
     raw_input = input(
         "Please enter the score list whose only digits are 1, 2, 3, 4, or 5 \n (the score 5, 1, 2 should be entered as 512) \n"
     )
-    
-    #filter for just allowed scores (makes '123' or '1 2 3' or '1, 2, 3' all work the same)
+
+    # filter for just allowed scores (makes '123' or '1 2 3' or '1, 2, 3' all work the same)
     filtered_input = "".join([c for c in raw_input if c in allowed_scores])
+    # this is just iterating through the raw input and concatenating all allowed characters in order
 
     Score = [i for i in filtered_input]
     print(f"Score = {Score}")
@@ -60,11 +61,7 @@ get_input_score()
 input("\n Hit enter to proceed to the next problem...")
 
 
-
-
-
 #################################################################################
-
 
 
 """
@@ -98,9 +95,42 @@ def findChars():
 
     print("\n \n Problem 2: \n")
 
-    letter_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    letter_list = [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+    ]
 
-    # could use string.ascii_lowercase to define letter list
+    # I think the hint is referring tothe use of
+    ## string.ascii_lowercase to define letter list
+
+    import string
+
+    letter_list = string.ascii_lowercase
+    # The name letter list for this is misleading since it is now a string.
 
     lower_input = input("Please input a lowercase string: \n")
 
@@ -113,14 +143,13 @@ def findChars():
     print(letter_count)
     return letter_count
 
-    
 
 findChars()
 
 
-
 def findChars_better():
     import string
+
     letters = string.ascii_lowercase
 
     lower_input = input("Please input a lowercase string: \n")
@@ -132,15 +161,10 @@ def findChars_better():
     print(output)
 
 
-
 input("\n Hit enter to proceed to the next problem...")
 
 
-
-
 #################################################################################
-
-
 
 
 """
@@ -170,34 +194,39 @@ def checkString():
 
     """
     print("\n Problem 3: \n \n")
-    
+
     vowels = "aeiou"
-    
-    # opens the strings file in the same location in read mode.
-    strings_file = open('strings.txt', 'r')
+
+    # opens the strings file in read mode.
+    strings_file = open("strings.txt", "r")
+    # Note this means you have to run the script from the directory containing the homework and strings.txt
 
     # a list of strings where each entry is a line from the file
-    raw_strings = strings_file.readlines() 
+    raw_strings = strings_file.readlines()
 
     # remove line breaks and whitespace
-    strings = [s.strip() for s in raw_strings]  
+    strings = [s.strip() for s in raw_strings]
 
-    for string in strings: 
+    for string in strings:
 
         # tracks if the string is vowel-alphabetical ordered
         vowel_alphabetical = True
 
-        latest_vowel_index = -1 # initialize at -1
+        latest_vowel_index = -1  # initialize at -1
 
         for vowel in vowels:
             # get index of vowel, returns -1 if not found
-            next_vowel_index = string.find(vowel) #left most index of next vowel
+            next_vowel_index = string.find(vowel)  # left most index of next vowel
 
-            if next_vowel_index != -1: # if next vowel exists in the string 
-                #check order using and so it stays false if false at any step
-                vowel_alphabetical = vowel_alphabetical and (next_vowel_index > latest_vowel_index)
+            if next_vowel_index != -1:  # if next vowel exists in the string
+                # check order using and so it stays false if false at any step
+                vowel_alphabetical = vowel_alphabetical and (
+                    next_vowel_index > latest_vowel_index
+                )
                 # update latest non -1 vowel position
-                latest_vowel_index = string.rfind(vowel) # update latest to rightmost instance of next
+                latest_vowel_index = string.rfind(
+                    vowel
+                )  # update latest to rightmost instance of next
 
         # print results
         if vowel_alphabetical:
@@ -207,15 +236,13 @@ def checkString():
 
     strings_file.close()
 
+
 checkString()
 
 input("\n Hit enter to proceed to the next problem...")
 
 
-
-
 #################################################################################
-
 
 
 """
@@ -239,8 +266,8 @@ def reverse_vowels(st: str):
     # make sure string is in lower case
 
     st = st.lower()
-    vowels = 'aeiou'
-    
+    vowels = "aeiou"
+
     # create vowel list from st
     vowel_list = []
     for s in st:
