@@ -79,7 +79,6 @@ def getFor(n: int, words: list[str]):
     return output
 
 
-print(getFor(5, ['hello', 'brightness', 'my', 'old', 'friend', 'happy']))
 
 def getWhile(n: int, words: list[str]):
     '''
@@ -107,7 +106,6 @@ def getWhile(n: int, words: list[str]):
         
 
 
-print(getWhile(5, ['hello', 'brightness', 'my', 'old', 'friend', 'happy']))
 
 
 
@@ -146,7 +144,6 @@ def getWhileTrue(n: int, words: list[str]):
     return output
 
 
-print(getWhileTrue(5, ['hello', 'brightness', 'my', 'old', 'friend', 'happy']))
         
 
 
@@ -237,33 +234,60 @@ def twoVowels(st: str):
 # attempting to use NumPy standard
 # https://numpydoc.readthedocs.io/en/latest/format.html
 
-def listCompare(l1: list[int], l2: list[int]):
+def listCompare(L1: list[int], L2: list[int]):
     '''
     Description
     ------------
+    Takes as input two lists of integers and outputs a list of integers.
+    Picks the larger of the two input lists to be gauge while the smaller is inlist.
+    If the lists have the same length then the first list is set to gauge.
+    If an element x in inlist is greater than more than half of the elements in gauge then x is added to the output list.
+
+
+    Notes
+    -----
+    Note that if gauge is of odd length then we round up (e.g. if gauge = [1, 2, 3] then every element of the output list must be > 2).
 
 
     Parameters
     -----------
-    l1, l2 : list[int]
-        Input lists for comparison. If the two lists are of the same length then l1 is 'gauge' and l2 is 'inlist'.
+    L1, L2 : list[int]
+        Input lists for comparison. 
 
-
-    
 
     Returns
     --------
-
-    outlist: list[int]
-    errormsg: str
+    outlist : list[int]
+    err_msg : str or None
+        If there is an error or empty input list we return the string
+        'Problem in your input lists'
 
     '''
 
+    import math
+
+    # setup gauge and inlist
+
+    try:
+        assert(len(L1) > 0)
+        assert(len(L2) > 0)
+
+        assert(type(L1) == list)
+        assert(type(L2) == list)
 
 
+        if len(L1) >= len(L2):
+            gauge, inlist = L1, L2
+        elif len(L1) < len(L2):
+            gauge, inlist = L2, L1
 
+        outlist = []
 
+        for x in inlist:
+            if sum(1 for g in gauge if x > g) > math.ceil(len(gauge)/2):
+                outlist.append(x)
+        
+        return outlist
 
-
-
-
+    except:
+        return 'Problem in your input lists'
