@@ -269,17 +269,21 @@ def listCompare(L1: list[int], L2: list[int]):
     # setup gauge and inlist
 
     try:
+        # catch some edge cases
         assert(len(L1) > 0)
         assert(len(L2) > 0)
 
+        # the question says specifically list and not tuples
+        # if we wanted list-like as well I would use isintance.
         assert(type(L1) == list)
         assert(type(L2) == list)
 
-
+        # set gauge and inlist as described
         if len(L1) >= len(L2):
             gauge, inlist = L1, L2
         elif len(L1) < len(L2):
             gauge, inlist = L2, L1
+
 
         outlist = []
 
