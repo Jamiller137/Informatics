@@ -237,7 +237,7 @@ def twoVowels(st: str):
 def listCompare(L1: list[int], L2: list[int]):
     '''
     Description
-    ------------
+    -----------
     Takes as input two lists of integers and outputs a list of integers.
     Picks the larger of the two input lists to be gauge while the smaller is inlist.
     If the lists have the same length then the first list is set to gauge.
@@ -250,13 +250,13 @@ def listCompare(L1: list[int], L2: list[int]):
 
 
     Parameters
-    -----------
+    ----------
     L1, L2 : list[int]
         Input lists for comparison. 
 
 
     Returns
-    --------
+    -------
     outlist : list[int]
     err_msg : str or None
         If there is an error or empty input list we return the string
@@ -284,6 +284,7 @@ def listCompare(L1: list[int], L2: list[int]):
         outlist = []
 
         for x in inlist:
+            # count number of elements x is greater than
             if sum(1 for g in gauge if x > g) > math.ceil(len(gauge)/2):
                 outlist.append(x)
         
