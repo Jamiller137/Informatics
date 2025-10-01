@@ -275,24 +275,27 @@ def listCompare(L1: list[int], L2: list[int]):
 
         # the question says specifically list and not tuples
         # if we wanted list-like as well I would use isintance.
-        assert(type(L1) == list)
-        assert(type(L2) == list)
+        assert type(L1) is list
+        assert type(L2) is list
 
-        # set gauge and inlist as described
+        #initialize:
+        gauge, inlist, outlist = [], [], []
+
+        # set gauge to be largest* list
         if len(L1) >= len(L2):
             gauge, inlist = L1, L2
         elif len(L1) < len(L2):
             gauge, inlist = L2, L1
 
 
-        outlist = []
-
+        # actually do the thing
         for x in inlist:
-            # count number of elements x is greater than
+            # count number of elements x is greater than...
             if sum(1 for g in gauge if x > g) > math.ceil(len(gauge)/2):
+                # if enough then add to outlist
                 outlist.append(x)
         
         return outlist
 
-    except:
+    except Exception:
         return 'Problem in your input lists'
