@@ -1,0 +1,8 @@
+Parrots & Alligators, Otters, Habaneros 
+Bonobos & Parrots, Rattlers, Alligators 
+Serranos & Parrots, Alligators
+Otters & Serranos, Flamingos, Habaneros 
+Rattlers & Parrots, Serranos 
+Flamingos &
+Habaneros & Bonobos, Alligators, Flamingoes, Rattlers
+Alligators & Bonobos, Serranos, Rattlers, Otters
