@@ -69,17 +69,17 @@ def readData():
     
     '''
 
-
     detail_file = open(file='teamDetails.txt', mode='r')
-    lines = detail_file.readlines()
-    for idx in range(len(lines) // 2):
-        new_entry = []
-        parts = lines[2*idx].split(', ')
-        players = lines[2*idx + 1].split(', ')
-        new_entry = [parts, players]
-        DS.append(new_entry)
+    wins_file = open(file='teamDetails.txt', mode='r')
+    teams = set()
+    for entry in wins_file.readlines():
+        team_wins = entry.rstrip().split(', ')
+        team1 = team_wins[0].split(' & ')[0]
+        team2 = team_wins[0].split(' & ')[-1]
+        teams.add(team1)
+        teams.add(team2)
 
-    print(DS)
+    print(teams)
 
 readData()
 
