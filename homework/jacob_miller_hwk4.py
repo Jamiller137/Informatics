@@ -54,7 +54,6 @@ def readData():
     More generally, this structure corresponds to:
 
     [
-    
     [Team name, date established, address, \
     [list of player names], [list of teams against which this team has won]
     ]
@@ -69,7 +68,20 @@ def readData():
     returns None
     
     '''
- 
+
+
+    detail_file = open(file='teamDetails.txt', mode='r')
+    lines = detail_file.readlines()
+    for idx in range(len(lines) // 2):
+        new_entry = []
+        parts = lines[2*idx].split(', ')
+        players = lines[2*idx + 1].split(', ')
+        new_entry = [parts, players]
+        DS.append(new_entry)
+
+    print(DS)
+
+readData()
 
 def writeDetails():
     
