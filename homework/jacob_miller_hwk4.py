@@ -69,20 +69,38 @@ def readData():
     
     '''
 
-    detail_file = open(file='teamDetails.txt', mode='r')
-    wins_file = open(file='teamDetails.txt', mode='r')
-    teams = set()
-    for entry in wins_file.readlines():
-        team_wins = entry.rstrip().split(', ')
-        team1 = team_wins[0].split(' & ')[0]
-        team2 = team_wins[0].split(' & ')[-1]
-        teams.add(team1)
-        teams.add(team2)
+    global DS
 
-    print(teams)
+    detail_file = open(file='teamDetails.txt', mode='r')
+    lines = detail_file.readlines()
+    detail_file.close()
+
+    team_info = dict()
+
+    for i in range(0, len(lines), 2):
+        # first line is team, year, and address (with commas)
+        line1 = lines[i].strip().split(', ')
+        team_name = line1[0]
+        year = line1[1]
+
+        # line1[2:] is taking everying in the second index onwards
+        # we are then joining this with a comma after the fact.
+        address = ', '.join(line1[2:])
+
+        # second line is player names
+        line2 = lines[i+1].strip()
+
+        # there are some asterists in the form [*^n] to remove 
+            # but we can just split along [ and take the first entry
+        players = [player.strip().split('[*')[0].strip() for player in line2.split(', ')]
+
+        team_info[team_name] = [team_name, year, address, players, []]
+
+    print(team_info)
+
 
 readData()
-
+"""
 def writeDetails():
     
     '''
@@ -178,4 +196,4 @@ if __name__ == "__main__":
     main()
 
 
-
+"""
