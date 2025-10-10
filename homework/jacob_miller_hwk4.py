@@ -224,7 +224,7 @@ def gamesPlayed(team: str):
     '''
 
     # assumes that the teams only played eachother once and no draws!
-    # we can make a list of tuples (Winner, Loser)
+    # we can make a list of tuples... each game = (Winner, Loser)
     games = []
     for entry in DS:
         for win in entry[4]:
@@ -239,7 +239,6 @@ def gamesPlayed(team: str):
 
 
     
-"""
 def mostLosses():
     '''
     5 points
@@ -248,7 +247,26 @@ def mostLosses():
     
     '''
 
+    loser_dict = dict()
     
+    # create loser_dict which counts each teams losses
+    for entry in DS:
+        for loser in entry[4]:
+            if loser not in loser_dict:
+                # create entry with initial loss count = 0
+                loser_dict[loser] = 0
+
+            # increase loss counter
+            loser_dict[loser] += 1
+    
+    max_loss = max(loser_dict.values())
+
+    # return biggest loser list
+    return [team for team, l in loser_dict.items() if l == max_loss]
+
+
+
+"""
 def sortByNumWins():
     '''
     5 points
