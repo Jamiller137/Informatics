@@ -69,17 +69,16 @@ def readData():
     
     '''
 
-    global DS
-
     detail_file = open(file='teamDetails.txt', mode='r')
-    lines = detail_file.readlines()
+    detail_lines = detail_file.readlines()
     detail_file.close()
 
+    # using a dict for better organization
     team_info = dict()
 
-    for i in range(0, len(lines), 2):
+    for i in range(0, len(detail_lines), 2):
         # first line is team, year, and address (with commas)
-        line1 = lines[i].strip().split(', ')
+        line1 = detail_lines[i].strip().split(', ')
         team_name = line1[0]
         year = line1[1]
 
@@ -88,18 +87,41 @@ def readData():
         address = ', '.join(line1[2:])
 
         # second line is player names
-        line2 = lines[i+1].strip()
+        line2 = detail_lines[i+1].strip()
 
         # there are some asterists in the form [*^n] to remove 
             # but we can just split along [ and take the first entry
-        players = [player.split('[*')[0].strip() for player in line2.split(', ')]
-
+        players = [plr.split('[')[0].strip() for plr in line2.split(', ')]
+        
+        # create dict entry with intial empty list for wins
         team_info[team_name] = [team_name, year, address, players, []]
 
-    print(team_info)
+    # now we get team wins 
+    wins_file = open('teamWins.txt', 'r')
+    win_lines = [line.strip() for line in wins_file.readlines()]
+    wins_file.close()
+
+    for line in win_lines:
+        # get team and their wins
+        # NOTE: This assumes that '&' is in each line
+        team, win_str = line.split('&')
+
+        # make win list
+        team_wins = win_str.strip().split(', ')
+        
+        # if no wins leave as an empty list instead of ['']
+        if team_wins[0].strip():
+            team_info[team.strip()][4] = team_wins
+
+    # update DS
+    global DS
+    DS = list(team_info.values())
+
+    return None
 
 
 readData()
+
 """
 def writeDetails():
     
