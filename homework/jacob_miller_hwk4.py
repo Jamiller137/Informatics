@@ -92,7 +92,7 @@ def readData():
 
         # there are some asterists in the form [*^n] to remove 
             # but we can just split along [ and take the first entry
-        players = [player.strip().split('[*')[0].strip() for player in line2.split(', ')]
+        players = [player.split('[*')[0].strip() for player in line2.split(', ')]
 
         team_info[team_name] = [team_name, year, address, players, []]
 
