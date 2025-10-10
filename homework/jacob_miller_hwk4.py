@@ -189,6 +189,24 @@ def stateTeams():
     
 
     '''
+    state_dict = dict()
+
+    # could instead do address[-2:] but that would only handle abbrev.
+    get_state = lambda entry: entry[2].strip().split(' ')[-1]
+    # the above is effectively taking the last word in the address string.
+    
+    # find state_set
+    for entry in DS:
+        state = get_state(entry)
+
+        # create state in dictionary
+        if state not in state_dict:
+            state_dict[state] = []
+
+        state_dict[state].append(entry[0])
+
+    # this doesn't match the sorting that the question has if that is somehow important
+    return [[state, teams] for state, teams in state_dict.items()]
 
 
 """
