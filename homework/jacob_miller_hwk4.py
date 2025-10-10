@@ -79,7 +79,7 @@ def readData():
     for i in range(0, len(detail_lines), 2):
         # first line is team, year, and address (with commas)
         line1 = detail_lines[i].strip().split(', ')
-        team_name = line1[0]
+        team_name = line1[0].replace('Flamingoes', 'Flamingos')
         year = line1[1]
 
         # line1[2:] is taking everying in the second index onwards
@@ -105,12 +105,12 @@ def readData():
         # get team and their wins
         if '&' in line:
             team, win_str = line.strip().split('&')
-            team = team.strip()
+            team = team.strip().replace('Flamingoes', 'Flamingos')
 
             # avoid creating an entry if details do not exist.
             if team in team_info:
-                # make wins list
-                wins = [w.strip() for w in win_str.strip().split(', ') if w.strip()]
+                # make wins list and fix Flamingoes typo
+                wins = [w.replace('Flamingoes', 'Flamingos').strip() for w in win_str.strip().split(', ') if w.strip()]
                 team_info[team.strip()][4] = wins
 
     # update DS
@@ -189,6 +189,9 @@ def stateTeams():
     
 
     '''
+
+    global DS
+
     state_dict = dict()
 
     # could instead do address[-2:] but that would only handle abbrev.
@@ -209,8 +212,7 @@ def stateTeams():
     return [[state, teams] for state, teams in state_dict.items()]
 
 
-"""
-def gamesPlayed():
+def gamesPlayed(team: str):
     '''
     5 points
     
@@ -220,7 +222,24 @@ def gamesPlayed():
     For example, Flamingos have played 2 games and lost both of them so
     return 2, 2
     '''
+
+    # assumes that the teams only played eachother once and no draws!
+    # we can make a list of tuples (Winner, Loser)
+    games = []
+    for entry in DS:
+        for win in entry[4]:
+            games.append( (entry[0], win) )
+    team_games = [g for g in games if team in g]
     
+    
+    total_games = len(team_games)
+    num_losses = sum([1 for g in team_games if g[1] == team ])
+
+    return total_games, num_losses
+
+
+    
+"""
 def mostLosses():
     '''
     5 points
