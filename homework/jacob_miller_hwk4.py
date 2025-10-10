@@ -68,6 +68,12 @@ def readData():
     returns None
     
     '''
+    
+    # NOTE: There are two issues with the input files:
+        # 1. Flamingos vs Flamingoes
+        # 2. Smash Serve Avenue. has a period even though it is not abbreviated
+
+    # I will fix Flamingos but for avenue I will not 
 
     detail_file = open(file='teamDetails.txt', mode='r')
     detail_lines = detail_file.readlines()
@@ -79,6 +85,7 @@ def readData():
     for i in range(0, len(detail_lines), 2):
         # first line is team, year, and address (with commas)
         line1 = detail_lines[i].strip().split(', ')
+        # someone misspelled a team name
         team_name = line1[0].replace('Flamingoes', 'Flamingos')
         year = line1[1]
 
@@ -105,6 +112,7 @@ def readData():
         # get team and their wins
         if '&' in line:
             team, win_str = line.strip().split('&')
+            # fix inconsistent spelling
             team = team.strip().replace('Flamingoes', 'Flamingos')
 
             # avoid creating an entry if details do not exist.
@@ -120,7 +128,6 @@ def readData():
     return None
 
 
-readData()
 
 def writeDetails():
     
@@ -164,7 +171,6 @@ def writeDetails():
             output.write('\n'.join([line1, line2, line3, line4]))
 
 
-writeDetails()
 
 def stateTeams():
     '''
@@ -210,6 +216,7 @@ def stateTeams():
 
     # this doesn't match the sorting that the question has if that is somehow important
     return [[state, teams] for state, teams in state_dict.items()]
+
 
 
 def gamesPlayed(team: str):
@@ -266,7 +273,6 @@ def mostLosses():
 
 
 
-"""
 def sortByNumWins():
     '''
     5 points
@@ -279,7 +285,13 @@ def sortByNumWins():
     
     '''
 
-    
+    global DS2
+    DS2 = sorted(DS, key=lambda entry: len(entry[4]))
+
+    return DS2
+
+
+
 def main():
     '''
     5 points
@@ -287,12 +299,41 @@ def main():
     call your functions here in a logical order
     e.g., read the data, then write it, then run the function to
     determine teams for each state etc. so you run each of your functions.
-    
+    '''
 
-          
+    readData()
+
+    writeDetails()
+
+
+    state_teams = stateTeams()
+    print("Teams by State:")
+    for state, teams in state_teams:
+        print(f"    {state}: {', '.join(teams)}")
+    print('\n')
+
+
+    print("Team Records:")
+    for entry in DS:
+        total, losses = gamesPlayed(entry[0])
+        print(f"    {entry[0]} played a total of {total} games with {losses} losses!")
+    print('\n')
+
+
+    biggest_losers = mostLosses()
+    print(f"Team(s) with the most losses: ")
+    for t in biggest_losers:
+        print(f"    {t}")
+    print('\n')
+
+    # made DS2 global since DS is global and I'm not sure about test suite.
+    DS2 = sortByNumWins()
+
+    print("Teams sorted by number of wins (increasing order):")
+    for entry in DS2:
+        print(f"    {entry[0]}")
+
+    
 
 if __name__ == "__main__":
     main()
-
-
-"""
