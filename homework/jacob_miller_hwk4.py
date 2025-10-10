@@ -122,7 +122,6 @@ def readData():
 
 readData()
 
-"""
 def writeDetails():
     
     '''
@@ -144,7 +143,28 @@ def writeDetails():
     etc.
         
     '''
- 
+    with open('output.txt', 'w') as output:
+        for entry in DS:
+            line1 = f"The team {entry[0]} was established in {entry[1]} and is located in {entry[2]}.\n"
+            line2 = f"Team members are: {', '.join(entry[3])}.\n"
+
+            # by default make string with no won over sentence.
+            line3 = f"The team has had {len(entry[4])} wins.\n"
+            
+            # this edge case doesnt exist in the given data but should be handled.
+            if len(entry[4]) == 1:
+                line3 = f"The team has had {len(entry[4])} wins. They have won over the teams {entry[4][0]}.\n"
+
+            # if more than one win then the given structure makes sense
+            if len(entry[4]) > 1:
+                line3 = f"The team has had {len(entry[4])} wins. They have won over the teams {', '.join(entry[4][:-1])} and {entry[4][-1]}.\n"
+
+            # There is some ambiguity on if this should actually exist for the last entry...
+            line4 =  "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+            output.write('\n'.join([line1, line2, line3, line4]))
+
+
+writeDetails()
 
 def stateTeams():
     '''
@@ -170,6 +190,8 @@ def stateTeams():
 
     '''
 
+
+"""
 def gamesPlayed():
     '''
     5 points
