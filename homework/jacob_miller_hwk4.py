@@ -103,15 +103,15 @@ def readData():
 
     for line in win_lines:
         # get team and their wins
-        # NOTE: This assumes that '&' is in each line
-        team, win_str = line.split('&')
+        if '&' in line:
+            team, win_str = line.strip().split('&')
+            team = team.strip()
 
-        # make win list
-        team_wins = win_str.strip().split(', ')
-        
-        # if no wins leave as an empty list instead of ['']
-        if team_wins[0].strip():
-            team_info[team.strip()][4] = team_wins
+            # avoid creating an entry if details do not exist.
+            if team in team_info:
+                # make wins list
+                wins = [w.strip() for w in win_str.strip().split(', ') if w.strip()]
+                team_info[team.strip()][4] = wins
 
     # update DS
     global DS
