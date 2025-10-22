@@ -218,8 +218,8 @@ def convert(mymatrix: list[list[int]]):
     letters = string.ascii_lowercase
 
     # make sure input is actually a matrix:
-    for col in mymatrix:
-       assert len(col) == num_rows, f"Error: column lengths do not match."
+    if not all(len(col) == num_rows for col in mymatrix):
+        raise ValueError("Invalid Matrix: Inconsistent column lengths!")
 
     # initialize chrmatrix as a deep copy (since we are changing inner lists)
     # this allows using indices to iterate through the matrix
