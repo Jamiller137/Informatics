@@ -1,0 +1,7 @@
+Alaska| days = 7| onshore = free| airline = included | Viking,    Seneca
+Antartica| days = 11| onshore = none| airline = not included | Silverline, P&O Cruises
+Caribbean| days = 7| onshore = not free| airline = included | Royal Caribbean, Viking
+Greek Islands| days = 3| onshore = not free| airline = included | Oceana, Marella
+Europe| onshore = not free|  days = 12| airline = not included | Holland America, Emerald
+Mediterranean| days = 14| onshore = free| airline = included | Celestyal, Windstar, Viking
+South Africa| days = 3|  airline = included | onshore = free| Norwegian Dawn, Oceana
