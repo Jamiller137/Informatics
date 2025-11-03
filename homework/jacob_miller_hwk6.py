@@ -212,13 +212,13 @@ def shortestCruise() -> list[list[list[str]]]:
     return [ [[str(region), str(liner)] \
         for liner in region_dict['liners'] ] \
         for region, region_dict in cruises.items() \
-        if region_dict['days'] == min(value['days'] for value in cruises.values())]
+        if region_dict['days'] == min(value['days'] for value in cruises.values()) ]
 
    
 
 def main():
     '''
-    This just runs the examples from the questions' docstrings.
+    This demonstrates the functions from the homework. Assumes that cruises.txt is in the same directory.
     '''
 
     print("="*80)
