@@ -284,7 +284,7 @@ def main():
     print(f"\n   All cruises with {min_days} days:")
     for region_group in shortest:
         for cruise in region_group:
-            print(f"   - Region: {cruise[0]}, Liner: {cruise[1]}")
+            print(f"     Region: {cruise[0]}, Liner: {cruise[1]}")
 
     print("\n" + "="*80)
 
