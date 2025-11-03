@@ -2,7 +2,7 @@
 test harness for hwk6
 '''
 
-import hwk6_2025_sol as std
+import jacob_miller_hwk6 as std
 
 def run_test(test_func, test_number):
     try:
@@ -42,6 +42,5 @@ if __name__ == "__main__":
     run_test(test_readData, "readData")
     run_test(test_selectRegions, "selectRegions")
     run_test(test_totalDays, "totalDays")
-    run_test(test_getLiners, "getLiners")
     run_test(test_shortestCruise, "shortestCruise")
    

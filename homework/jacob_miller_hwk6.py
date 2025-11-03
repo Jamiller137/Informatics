@@ -10,7 +10,7 @@ structures from data in files.
 
 '''
 
-def readData():
+def readData() -> None:
     '''
     (15 points)
 
@@ -54,10 +54,57 @@ def readData():
     3. There may be any number of spaces around delimiters such as | and ,
 
     '''
-     
+    global cruises, liners
+    cruises = {}
+    liners = {}
+
+    with open(file="cruises.txt", mode='r') as file:
+        lines = file.readlines()
+
+        # CRUISES
+        for line in lines:
+            # first split along |
+            entry = [x.strip() for x in line.split('|')]
+            # get region
+            region = entry.pop(0)
+            # get liners
+            entry_liners = [x.strip() for x in entry.pop(-1).split(',')]
+
+            # now entry contains just entrys for the region's dictionary
+            # which we prep here:
+            cruises[region] = {}
+            cruises[region]['liners'] = entry_liners
+
+            # update region's dictionary entry:
+            for e in entry:
+                key = e.split('=')[0].strip()
+                value = e.split('=')[-1].strip()
+                # make days an integer instead of a string
+                if key == 'days':
+                    value = int(value)
+
+                cruises[region][key] = value
+            
+
+
+
+        # LINERS
+        liner_set = set()
+        for value in cruises.values():
+            liner_set.update(value['liners'])
+
+        for l in liner_set:
+            # get regions which contain the liner from cruises dict
+            liners[l] = [r for r in cruises.keys() if l in cruises[r]['liners']]
+
+    return None
+
+
+
+readData()
  
      
-def selectRegions(onsh, air):
+def selectRegions(onsh: str, air: str) -> list[str]:
     '''
     (10 points)
 
@@ -77,8 +124,21 @@ def selectRegions(onsh, air):
     Return: list of one or more strings including possibly an empty list.
 
     '''
+    # this is not really necessary but I added it anyway
+    global cruises
 
- def totalDays(liner):
+    matched_regions = []
+
+    for key, value in cruises.items():
+        if value['onshore'] == onsh and value['airline'] == air:
+            matched_regions.append(key)
+
+    return matched_regions
+
+
+
+
+def totalDays(liner: str) -> int:
     '''
 
     Points: 10
@@ -98,10 +158,24 @@ def selectRegions(onsh, air):
     Returns: integer
     
     '''
+    global liners, cruises
+    
+    # if liner doesn't exist return 0
+    if liner not in liners.keys():
+        return 0
+
+    # STEPS:
+        # given liner
+        # find regions where liner is included from liners dict
+        # find days per region using cruises
+        # sum the result
+
+    # to write the list comprehension we go in reverse order
+    return sum([ cruises[region]['days'] for region in liners[liner]])
 
  
  
-def shortestCruise():
+def shortestCruise() -> list[list[list[str]]]:
     '''
     Points: 10
 
@@ -123,13 +197,98 @@ def shortestCruise():
     Bonus 1 point if you can use list comprehension in some of the steps
 
     '''
+    # STEPS:
+        # find regions with the lowest days using cruises.values()
+        # for each region:
+            # find liners in the region using cruises[...]['liners']
+            # create a list entry [region, liner]
+
+    # to implement as a list comprehension we go in reverse order
+
+    # here I just make it a single nested list comprehension
+    # really the min days check should only be computed once
+        # but it is funnier this way
+
+    return [ [[str(region), str(liner)] \
+        for liner in region_dict['liners'] ] \
+        for region, region_dict in cruises.items() \
+        if region_dict['days'] == min(value['days'] for value in cruises.values())]
 
    
 
 def main():
     '''
-    include a main function that calls your functions suitably
+    This just runs the examples from the questions' docstrings.
     '''
+
+    print("="*80)
+    print("HOMEWORK 6: Jacob Miller")
+    print("="*80)
+
+
+    # readData()
+    print("\n1. Loading cruise data from cruises.txt...")
+    readData()
+
+    print("\n2. Sample of loaded data:")
+    print("\n   CRUISES:")
+    # first 3 keys
+    for region in list(cruises.keys())[:3]:
+        print(f"     {region} : {cruises[region]}")
+
+    print("\n   LINERS:")
+    for liner in list(liners.keys())[:3]:
+        print(f"     {liner} : {liners[liner]}")
+
+
+    # selectRegions()
+    print("\n" + "="*80)
+    print("3. Testing selectRegions() function:")
+    print("="*80)
+
+    print("\n   Regions with onshore='not free' and airline='not included':")
+    result1 = selectRegions('not free', 'not included')
+    print(f"   Result: {result1}")
+
+    print("\n   Regions with onshore='free' and airline='included':")
+    result2 = selectRegions('free', 'included')
+    print(f"   Result: {result2}")
+
+    print("\n   Regions with onshore='none' and airline = 'not included':")
+    result3 = selectRegions('none', 'not included')
+    print(f"   Result: {result3}")
+
+
+    # totalDays()
+    print("\n" + "="*80)
+    print("4. Testing totalDays() function:")
+    print("="*80)
+
+    test_liners = ['Viking', 'Oceana', 'Seneca', 'Iowa Cruise Liner']
+    for liner in test_liners:
+        days = totalDays(liner)
+        regions = liners.get(liner, [])
+        print(f"\n   {liner}:")
+        print(f"     Regions = {regions}")
+        print(f"     Total days = {days}")
+
+
+    # shortestCruise()
+    print("\n" + "="*80)
+    print("5. Testing shortestCruise() function:")
+    print("="*80)
+
+    shortest = shortestCruise()
+    min_days = min(entry['days'] for entry in cruises.values())
+    print(f"\n   Shortest cruise duration: {min_days} days")
+    print(f"\n   All cruises with {min_days} days:")
+    for region_group in shortest:
+        for cruise in region_group:
+            print(f"   - Region: {cruise[0]}, Liner: {cruise[1]}")
+
+    print("\n" + "="*80)
+
 
 if __name__ == "__main__":
     main()
+
