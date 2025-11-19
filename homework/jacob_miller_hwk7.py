@@ -124,10 +124,9 @@ class Card():
 
 
     # 3. trump card method in Card
-    def is_trump_card(self) -> bool:
+    def is_trump_card(self, comparison:str) -> bool:
         global trump_suit
         global trump_shape
-        global comparison
 
         if comparison.lower() == 'simple':
             return self.suit.lower() == trump_suit.lower()
@@ -139,7 +138,7 @@ class Card():
             )
 
         else:
-            raise ValueError("The global comparison variable is expected "
+            raise ValueError("The comparison variable is expected "
                              "to be 'simple' or 'complex' "
                              f" but is set to: {comparison}")
 
@@ -152,8 +151,8 @@ class Card():
         if not isinstance(card2, Card):
             return NotImplemented
 
-        self_trump = self.is_trump_card()
-        card2_trump = card2.is_trump_card()
+        self_trump = self.is_trump_card(comparison)
+        card2_trump = card2.is_trump_card(comparison)
 
         if self_trump and not card2_trump:
             return 1
