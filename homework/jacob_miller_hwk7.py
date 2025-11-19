@@ -99,7 +99,32 @@ class Card():
     In addition to the above, code for the functions specified next.
     
     '''
-    pass
+
+    # 1. init card dunder method
+    def __init__(self, suit:str, shape:str, number:int):
+        if suit.lower() not in [s.lower() for s in Suits]:
+            raise ValueError(f"Input suit {suit} is not a valid option.")
+
+        if shape.lower() not in [s.lower() for s in Shapes]:
+            raise ValueError(f"Input shape {shape} is not a valid option.")
+
+        if number not in Numbers:
+            raise ValueError(f"Input number {number} is not a valid option.")
+
+        self.suit = suit
+        self.shape = shape
+        self.number = number
+
+
+    # 2. print card information
+    def __str__(self) -> str:
+        return f"This is a '{self.suit}-{self.shape}-{self.number}' card."
+
+    
+    def is_trump_card(self, comparison):
+        pass
+
+
             
 
 def makeDeck(): 
