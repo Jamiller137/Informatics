@@ -11,6 +11,8 @@ Working with classes (card game with a special deck)
 
 '''
 
+import random
+
 comparison = 'simple'  # default value
 Suits = ['Diamond', 'Heart', 'Spade', 'Club'] # can be changed during testing
 # for example I Suits might = ['Diamond', 'Ruby', 'Amethyst', 'Gold', 'Silver']
@@ -118,11 +120,52 @@ class Card():
 
     # 2. print card information
     def __str__(self) -> str:
-        return f"This is a '{self.suit}-{self.shape}-{self.number}' card."
+        return f"This is a '{self.suit}-{self.shape}-{self.number}' card"
 
-    
-    def is_trump_card(self, comparison):
-        pass
+
+    # 3. trump card method in Card
+    def is_trump_card(self) -> bool:
+        global trump_suit
+        global trump_shape
+        global comparison
+
+        if comparison.lower() == 'simple':
+            return self.suit.lower() == trump_suit.lower()
+
+        elif comparison.lower() == 'complex':
+            return (
+                self.suit.lower() == trump_suit.lower() and 
+                self.shape.lower() == trump_shape.lower()
+            )
+
+        else:
+            raise ValueError("The global comparison variable is expected "
+                             "to be 'simple' or 'complex' "
+                             f" but is set to: {comparison}")
+
+
+    # 4. greater-than method to find winning card
+    def __gt__(self, card2):
+        global comparison
+        
+        # make sure we are comparing to a card
+        if not isinstance(card2, Card):
+            return NotImplemented
+
+        self_trump = self.is_trump_card()
+        card2_trump = card2.is_trump_card()
+
+        if self_trump and not card2_trump:
+            return 1
+        elif card2_trump and not self_trump:
+            return 2
+        else:
+            if self.number > card2.number:
+                return 1
+            elif self.number < card2.number:
+                return 2
+            else:
+                return 0
 
 
             
@@ -163,10 +206,16 @@ def set_trump():
     5 points
     
     '''
-    pass
+    global trump_suit
+    global trump_shape
+    global Shapes
+    global Suits
+
+    trump_shape = random.choice(Shapes)
+    trump_suit = random.choice(Suits)
     
     
-def shuffle_deck():   
+def shuffle_deck():
     '''
     No parameters
     
@@ -177,7 +226,10 @@ def shuffle_deck():
     5 points
     
     '''
-    pass
+    global Deck
+    # make sure Deck exists
+    if Deck:
+        random.shuffle(Deck)
 
 
 def deal_one_card():  
@@ -192,7 +244,8 @@ def deal_one_card():
     5 points
     
     '''
-    pass
+    global Deck
+    return Deck.pop()
 
 
 def Game(number_rounds, compare_type): 
