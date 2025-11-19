@@ -143,7 +143,10 @@ def makeDeck():
     7 points
     
     '''
-    pass
+    for suit in Suits:
+        for shape in Shapes:
+            for number in Numbers:
+                Deck.append(Card(suit=suit, shape=shape, number=number))
 
     
 def set_trump(): 
