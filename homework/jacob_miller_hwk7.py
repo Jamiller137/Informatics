@@ -168,6 +168,23 @@ class Card():
                 return 0
 
 
+# 5. distribution function
+def distribution(suit: str, shape: str):
+    global Deck
+
+    if not Deck:
+        return 0
+
+    count= 0
+    for card in Deck:
+        if card.suit.lower() == suit.lower():
+            if card.shape.lower() == shape.lower():
+                count+= 1
+
+    return count
+
+
+
             
 
 def makeDeck(): 
@@ -317,7 +334,63 @@ def Game(number_rounds, compare_type):
     ]
 
     '''
-    pass
+    global comparison
+    global Deck
+    # clear Deck
+    Deck = []
 
+    # initialize Deck, comparison, and trump suit/shape
+    makeDeck()
+    comparison = compare_type
+    set_trump()
 
+    # initialize score counts
+    p_win_count = 0
+    q_win_count = 0
+    draws = 0
 
+    p_cards = []
+    q_cards = []
+
+    # main game loop:
+
+    for _ in range(number_rounds):
+        # make sure there are enough cards to continue
+        if len(Deck) < 2:
+            break
+
+        # shuffle deck first otherwise not fair on first turn
+        shuffle_deck()
+
+        p_current_card = deal_one_card()
+        q_current_card = deal_one_card()
+
+        # determine who wins
+
+        winner = (p_current_card > q_current_card)
+
+        if winner == 0:
+            draws += 1
+        elif winner == 1:
+            p_win_count += 1
+        elif winner == 2:
+            q_win_count += 1
+
+        # append cards to player hands
+        p_cards.append( 
+            (p_current_card.suit, p_current_card.shape, p_current_card.number)
+        )
+
+        q_cards.append( 
+            (q_current_card.suit, q_current_card.shape, q_current_card.number)
+        )
+
+    # post game:
+
+    result = (p_win_count, q_win_count, draws)
+
+    global trump_suit
+    global trump_shape
+    S = distribution(trump_suit, trump_shape)
+
+    return [p_cards, q_cards, result, S]
