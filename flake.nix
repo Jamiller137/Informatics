@@ -29,9 +29,8 @@
 
           shellHook = ''
             echo "setting up shell..."
-            export SHELL=${pkgs.zsh}/bin/zsh
             echo "Using Python $(python --version) with uv $(uv --version)"
-            
+
             if [ -f "uv.lock" ]; then
               echo "Syncing from uv.lock..."
               uv sync
@@ -41,9 +40,11 @@
               uv lock
               uv sync
             fi
-            
+
             source .venv/bin/activate
             echo "Ready!"
+
+            exec ${pkgs.zsh}/bin/zsh
           '';
 
           UV_CACHE_DIR = ".nix-uv-cache";
