@@ -17,8 +17,9 @@ https://networkx.org/documentation/stable/reference/index.html
 Networkx tutorial:
 https://networkx.org/documentation/stable/tutorial.html
 '''
+import networkx as nx
 
-
+G = nx.DiGraph()
 
 def read_data_into_graph():
     '''
@@ -31,9 +32,24 @@ def read_data_into_graph():
 
     Returns: None
     '''
-
+    global G
     # Assuming that the reddit file contains directed graph x -> y
+    # With no errors in the file:
 
+    with open('reddit_file.txt', 'r') as file:
+        for line in file:
+            parsed = line.split()
+
+            # make sure data makes sense
+            assert len(parsed) == 2
+            # add edge (automatically adds vertices if DNE)
+            G.add_edge(u_of_edge=parsed[0], v_of_edge=parsed[1])
+
+    return None
+            
+read_data_into_graph()
+
+    
 
 
     
@@ -49,9 +65,13 @@ def get_num_of_nodes_edges():
     Returns: a tuple where the first element is the number of nodes
     in 'G' and the second element is the number of edges in 'G'.
     '''
+    global G
 
+    return (G.number_of_nodes(), G.number_of_edges())
 
-def get_nodes_with_most_outgoing_edges(N):
+print(get_num_of_nodes_edges())
+
+def get_nodes_with_most_outgoing_edges(N: int):
     '''
     (6 points)
 
@@ -64,8 +84,29 @@ def get_nodes_with_most_outgoing_edges(N):
     (nodeid or label) and the count of its outward directed edges.
             The list is sorted by this count in descending order.
     '''
+    output = []
+    for node in G:
+        odeg = G.out_degree(node)
+        entry = (node, odeg)
 
-def get_nodes_with_most_incoming_edges(N):
+        #first go around automatically append
+        if len(output) < N:
+            output.append(entry)
+            # sort as descending on odeg count
+            output = sorted(output, key=lambda x: x[-1], reverse=True)
+
+        elif len(output) >= N:
+            if odeg >= output[-1][-1]:
+                # remove and add new entry at the end
+                output.pop(-1)
+                output.append(entry)
+                #resort output
+                output = sorted(output, key=lambda x: x[-1], reverse=True)
+
+    return output
+
+
+def get_nodes_with_most_incoming_edges(N: int):
     '''
     (6 points)
 
@@ -78,6 +119,31 @@ def get_nodes_with_most_incoming_edges(N):
     (nodeid or label) and the count of its inward directed edges.
             The list is sorted by this count in descending order.
     '''
+
+    # SAME APPROACH AS OUTGOING EDGES:
+    global G
+    
+    output = []
+    for node in G:
+        ideg = G.in_degree(node)
+        entry = (node, ideg)
+
+        #first go around automatically append
+        if len(output) < N:
+            output.append(entry)
+            # sort as descending on odeg count
+            output = sorted(output, key=lambda x: x[-1], reverse=True)
+
+        elif len(output) >= N:
+            if ideg >= output[-1][-1]:
+                # remove and add new entry at the end
+                output.pop(-1)
+                output.append(entry)
+                #resort output
+                output = sorted(output, key=lambda x: x[-1], reverse=True)
+
+    return output
+
 
  
 def get_num_of_connected_components():
@@ -92,9 +158,13 @@ def get_num_of_connected_components():
             connected components and the second is the number of weakly
             connected components.
     '''
+    global G
+
+    return ( nx.number_strongly_connected_components(G), nx.number_weakly_connected_components(G) )
 
 
-def get_nth_largest_strongly_connected_component(N):
+
+def get_nth_largest_strongly_connected_component(N: int):
     '''
     (5 points)
 
@@ -114,9 +184,26 @@ def get_nth_largest_strongly_connected_component(N):
                 connected components then return [None, 0, 0]
 
     '''
+    global G
+
+    # get list of sorted connected components (uses documentation example)
+    comp_list = sorted(nx.strongly_connected_components(G), key=len, reverse=True)
+
+    if len(comp_list) < N:
+        raise ValueError(f"There are not enough connected components ( { len(comp_list) } ) for your chosen N = { N } ")
+
+    component = G.subgraph(comp_list[N-1])
+
+    num_nodes = nx.number_of_nodes(component)
+    num_edges = nx.number_of_edges(component)
+    avg_shortest_path = nx.average_shortest_path_length(component)
+
+    return (num_nodes, num_edges, avg_shortest_path)
 
 
-def distance(D, N):
+
+
+def distance(D: int, N):
     '''
     (5 points)
 
@@ -132,8 +219,19 @@ def distance(D, N):
             If no such nodes exist, returns an empty set.
     '''
 
+    global G
 
-def weakly_connected_components(N):
+    result = set()
+
+    node_list = nx.descendants_at_distance(G, N, D)
+
+    for child in node_list:
+        result.add(child)
+
+    return result
+
+
+def weakly_connected_components(N: int):
     '''           
     (2 points)
 
@@ -145,4 +243,8 @@ def weakly_connected_components(N):
     Returns: a list of subgraphs as described above
     '''
 
+    global G
 
+    return [G.subgraph(x) for x in nx.weakly_connected_components(G) if len(x) == N ]
+
+    
