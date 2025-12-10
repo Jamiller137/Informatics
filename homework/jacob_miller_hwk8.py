@@ -46,13 +46,7 @@ def read_data_into_graph():
             G.add_edge(u_of_edge=parsed[0], v_of_edge=parsed[1])
 
     return None
-            
-read_data_into_graph()
 
-    
-
-
-    
 
 def get_num_of_nodes_edges():
     '''
@@ -65,11 +59,11 @@ def get_num_of_nodes_edges():
     Returns: a tuple where the first element is the number of nodes
     in 'G' and the second element is the number of edges in 'G'.
     '''
+
     global G
 
     return (G.number_of_nodes(), G.number_of_edges())
 
-print(get_num_of_nodes_edges())
 
 def get_nodes_with_most_outgoing_edges(N: int):
     '''
@@ -84,26 +78,11 @@ def get_nodes_with_most_outgoing_edges(N: int):
     (nodeid or label) and the count of its outward directed edges.
             The list is sorted by this count in descending order.
     '''
-    output = []
-    for node in G:
-        odeg = G.out_degree(node)
-        entry = (node, odeg)
+    global G
 
-        #first go around automatically append
-        if len(output) < N:
-            output.append(entry)
-            # sort as descending on odeg count
-            output = sorted(output, key=lambda x: x[-1], reverse=True)
+    results = [ (node, G.out_degree(node) ) for node in G ]
 
-        elif len(output) >= N:
-            if odeg >= output[-1][-1]:
-                # remove and add new entry at the end
-                output.pop(-1)
-                output.append(entry)
-                #resort output
-                output = sorted(output, key=lambda x: x[-1], reverse=True)
-
-    return output
+    return sorted(results, key=lambda x: x[1], reverse=True)[:N]
 
 
 def get_nodes_with_most_incoming_edges(N: int):
@@ -121,31 +100,14 @@ def get_nodes_with_most_incoming_edges(N: int):
     '''
 
     # SAME APPROACH AS OUTGOING EDGES:
+        # just now using in_degree
     global G
     
-    output = []
-    for node in G:
-        ideg = G.in_degree(node)
-        entry = (node, ideg)
+    results = [ (node, G.in_degree(node) ) for node in G ]
 
-        #first go around automatically append
-        if len(output) < N:
-            output.append(entry)
-            # sort as descending on odeg count
-            output = sorted(output, key=lambda x: x[-1], reverse=True)
-
-        elif len(output) >= N:
-            if ideg >= output[-1][-1]:
-                # remove and add new entry at the end
-                output.pop(-1)
-                output.append(entry)
-                #resort output
-                output = sorted(output, key=lambda x: x[-1], reverse=True)
-
-    return output
+    return sorted(results, key=lambda x: x[1], reverse=True)[:N]
 
 
- 
 def get_num_of_connected_components():
     '''
     (3 points)
@@ -161,7 +123,6 @@ def get_num_of_connected_components():
     global G
 
     return ( nx.number_strongly_connected_components(G), nx.number_weakly_connected_components(G) )
-
 
 
 def get_nth_largest_strongly_connected_component(N: int):
@@ -189,8 +150,9 @@ def get_nth_largest_strongly_connected_component(N: int):
     # get list of sorted connected components (uses documentation example)
     comp_list = sorted(nx.strongly_connected_components(G), key=len, reverse=True)
 
+    # add check from docstring
     if len(comp_list) < N:
-        raise ValueError(f"There are not enough connected components ( { len(comp_list) } ) for your chosen N = { N } ")
+        return [None, 0, 0]
 
     component = G.subgraph(comp_list[N-1])
 
@@ -198,7 +160,7 @@ def get_nth_largest_strongly_connected_component(N: int):
     num_edges = nx.number_of_edges(component)
     avg_shortest_path = nx.average_shortest_path_length(component)
 
-    return (num_nodes, num_edges, avg_shortest_path)
+    return [num_nodes, num_edges, avg_shortest_path]
 
 
 
@@ -220,15 +182,12 @@ def distance(D: int, N):
     '''
 
     global G
-
-    result = set()
-
-    node_list = nx.descendants_at_distance(G, N, D)
-
-    for child in node_list:
-        result.add(child)
-
-    return result
+    # is a set, however if N is not a node it can throw an error:
+    try:
+        node_list = nx.descendants_at_distance(G, N, D)
+        return node_list
+    except:
+        return set()
 
 
 def weakly_connected_components(N: int):
@@ -245,6 +204,9 @@ def weakly_connected_components(N: int):
 
     global G
 
+    # I am assuming subgraph means the subgraph type in networkx
+        # and not the list of nodes obtained from 
+        # nx.weakly_connected_components
     return [G.subgraph(x) for x in nx.weakly_connected_components(G) if len(x) == N ]
 
     
